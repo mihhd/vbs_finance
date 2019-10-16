@@ -23,7 +23,7 @@ class ChartStats extends Component{
                     {
                         label: "Credits held",
 
-                        fill: true,
+                        fill: false,
                         hidden:false,
                         datasetStroke: false,
                         lineTension: 0.3,
@@ -47,7 +47,7 @@ class ChartStats extends Component{
                     {
                         label: "Undisbursed amount",
 
-                        fill: true,
+                        fill: false,
                         hidden:false,
                         datasetStroke: false,
                         lineTension: 0.3,
@@ -71,7 +71,7 @@ class ChartStats extends Component{
                     {
                         label: "Disbursed amount",
 
-                        fill: true,
+                        fill: false,
                         hidden:false,
                         datasetStroke: false,
                         lineTension: 0.3,
