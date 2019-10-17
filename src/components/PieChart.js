@@ -2,54 +2,41 @@ import React, {Component} from 'react';
 import {Pie} from "react-chartjs-2";
 import axios from "axios";
 import Select from "react-select";
+import PieChartStats from "./PieChartStats";
 
 
 class PieChart extends Component {
     constructor(props) {
         super(props);
 
-        this.fetchInfo = this.fetchInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.state = {
             selectedOption: "",
-            selectYears: ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"],
-            labels: ['Under 1,000,000,000', 'Between 1,000,000,000 And 20,000,000,000', 'More Than 20,000,000,000'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['Blue', 'Red', 'Green']
-            }]
+            selectYears: [
+                {value:"2019", label:"2019" },
+                {value:"2018", label:"2018" },
+                {value:"2017", label:"2017" },
+                {value:"2016", label:"2016" },
+                {value:"2015", label:"2015" },
+                {value:"2014", label:"2014" },
+                {value:"2013", label:"2013" },
+                {value:"2012", label:"2012" },
+                {value:"2011", label:"2011" },
+                {value:"2010", label:"2010" },
+                {value:"2009", label:"2009" },
+                {value:"2008", label:"2008" },
+                {value:"2007", label:"2007" },
+                {value:"2006", label:"2006" },
+                {value:"2005", label:"2005" },
+                {value:"2004", label:"2004" },
+                {value:"2003", label:"2003" },
+                {value:"2002", label:"2002" },
+                {value:"2001", label:"2001" },
+                {value:"2000", label:"2000" },
+            ],
+
         }
     }
-
-    componentDidMount() {
-        this.fetchInfo();
-    }
-
-    async fetchInfo(){
-
-        let url = "https://finances.worldbank.org/resource/tdwh-3krx.json?$query=SELECT country, sum(original_principal_amount), sum(repaid_to_ida), sum(disbursed_amount), sum(undisbursed_amount) WHERE effective_date_most_recent_ BETWEEN '2010' AND '2011' GROUP BY country";
-        await axios.get(url)
-            .then(res => {
-                const fullInfo = res.data;
-
-                let under = fullInfo.filter(sum => sum.sum_original_principal_amount < 1000000000);
-                let between = fullInfo.filter(sum => (sum.sum_original_principal_amount > 1000000000) && (sum.sum_original_principal_amount < 20000000000));
-                let more = fullInfo.filter(sum => sum.sum_original_principal_amount > 20000000000);
-
-
-                console.log(fullInfo.length);
-                console.log(under.length);
-                console.log(between.length);
-                console.log(more.length);
-
-                let datasets = this.state.datasets;
-                datasets[0].data = [under.length, between.length, more.length];
-
-                this.setState({
-                    datasets: datasets
-                })
-            });
-    }
-
 
     handleChange = selectedOption => {
         this.setState(
@@ -61,18 +48,41 @@ class PieChart extends Component {
     render() {
         const { selectedOption } = this.state;
         return (
-            <div>
-                <Select
-                    value={selectedOption}
-                    onChange={this.handleChange}
-                    options={this.state.selectYears}
-                />
-                <Pie
-                    data={{
-                        labels: this.state.labels,
-                        datasets: this.state.datasets
-                    }}
-                />
+            <div className="row">
+                <div className="col-2">
+                    <h6>Select Year</h6>
+                    <Select
+                        value={selectedOption}
+                        onChange={this.handleChange}
+                        options={this.state.selectYears}
+                    />
+                </div>
+
+                <div className="col-10">
+                    <h3>Funding Groups By Year</h3>
+                    <hr/>
+                    <div className="row">
+                        <div className="col-6" style={{marginTop: "25px"}}>
+                            <h6>Original Principal Amount</h6>
+                            <PieChartStats selectedOption={this.state.selectedOption} statistics={"original"}/>
+                        </div>
+                        <div className="col-6" style={{marginTop: "25px"}}>
+                            <h6>Repaid Data To IDA</h6>
+                            <PieChartStats selectedOption={this.state.selectedOption} statistics={"repaid"}/>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-6" style={{marginTop: "25px"}}>
+                            <h6>Disbursed Amount</h6>
+                            <PieChartStats selectedOption={this.state.selectedOption} statistics={"disbursed"}/>
+                        </div>
+                        <div className="col-6" style={{marginTop: "25px"}}>
+                            <h6>Undisbursed Amount</h6>
+                            <PieChartStats selectedOption={this.state.selectedOption} statistics={"undisbursed"}/>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

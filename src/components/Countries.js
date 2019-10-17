@@ -38,6 +38,9 @@ class Countries extends Component {
                     return select;
                 });
                 this.setState({ countries: c, selectCountries: selectCountry});
+
+                console.log(selectCountry);
+
             })
     }
 
@@ -54,13 +57,17 @@ class Countries extends Component {
         return (
             <div className="row">
                 <div className="col-4">
+                    <h6>Select Country</h6>
                     <Select
                         value={selectedOption}
                         onChange={this.handleChange}
                         options={this.state.selectCountries}
                     />
                 </div>
-                <div className="col-8" style={{border: "solid black 1px"}}>
+                <div className="col-8">
+                    <h3>Usage Of Funds</h3>
+                    <h5><small>Last 1000 projects</small></h5>
+                    <hr/>
                     {this.state.selectedOption.label && <ChartStats countryName={this.state.selectedOption.label}/>}
                 </div>
             </div>
